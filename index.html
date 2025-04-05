@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tip Calculator App</title>
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --primary-dark: #388E3C;
+            --primary-light: #C8E6C9;
+            --accent-color: #FF9800;
+            --background: #FFFFFF;
+            --card-bg: #FFFFFF;
+            --text-primary: #212121;
+            --text-secondary: #757575;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            --hover-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background: #121212;
+                --card-bg: #1E1E1E;
+                --primary-color: #66BB6A;
+                --primary-dark: #43A047;
+                --primary-light: #1E332E;
+                --text-primary: #E0E0E0;
+                --text-secondary: #B0B0B0;
+                --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+                --card-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+                --hover-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--background);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            padding: 6rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            animation: gradientMove 15s ease infinite;
+            background-size: 200% 200%;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: floatIn 1.5s ease;
+        }
+
+        @keyframes floatIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            50% {
+                opacity: 0.5;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+            animation: fadeInUp 1s ease 0.2s backwards;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 4rem 2rem;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            animation: fadeInUp 1s ease backwards;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .feature-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 1.5rem;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        .currency-feature {
+            background: linear-gradient(135deg, var(--accent-color), #F57C00);
+            color: white;
+            padding: 3rem;
+            border-radius: 16px;
+            margin: 3rem 0;
+            animation: slideIn 1s ease 0.8s backwards;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .currency-box {
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            animation: fadeScale 0.5s ease;
+        }
+
+        @keyframes fadeScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .currency-feature h2 {
+            color: white;
+            margin-bottom: 1.5rem;
+            font-size: 2.2rem;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .currency-feature ul {
+            list-style: none;
+            margin-left: 1rem;
+        }
+
+        .currency-feature li {
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.1rem;
+            transition: transform 0.3s ease;
+            animation: slideRight 0.5s ease backwards;
+        }
+
+        .currency-feature li:hover {
+            transform: translateX(10px);
+        }
+
+        .currency-feature li::before {
+            content: "✓";
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            background: rgba(255, 255, 255, 0.2);
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .currency-feature li:nth-child(1) { animation-delay: 0.1s; }
+        .currency-feature li:nth-child(2) { animation-delay: 0.2s; }
+        .currency-feature li:nth-child(3) { animation-delay: 0.3s; }
+        .currency-feature li:nth-child(4) { animation-delay: 0.4s; }
+        .currency-feature li:nth-child(5) { animation-delay: 0.5s; }
+
+        @keyframes slideRight {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .currency-note {
+            font-style: italic;
+            opacity: 0.9;
+            margin-top: 2rem;
+            animation: fadeIn 1s ease 1s backwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 0.9; }
+        }
+
+        .highlight-box {
+            background: var(--card-bg);
+            border: 2px solid var(--primary-color);
+            border-radius: 16px;
+            padding: 3rem;
+            margin: 3rem 0;
+            animation: fadeInUp 1s ease 0.4s backwards;
+            box-shadow: var(--card-shadow);
+        }
+
+        .highlight-box h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+
+        .highlight-box p {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            line-height: 1.8;
+        }
+
+        .legal {
+            text-align: center;
+            padding: 3rem;
+            background: var(--card-bg);
+            margin-top: 3rem;
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .legal p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .legal-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+
+        .legal-button {
+            padding: 0.8rem 1.5rem;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .legal-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            .legal-buttons {
+                flex-direction: column;
+            }
+            
+            .feature-card, .highlight-box, .currency-feature {
+                padding: 2rem;
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>Tip Calculator</h1>
+        <p>Calculate tips with confidence using our intuitive and feature-rich calculator app</p>
+    </div>
+
+    <div class="container">
+        <div class="features">
+            <div class="feature-card reveal">
+                <h3>🎯 Smart Calculations</h3>
+                <p>Get accurate tip amounts instantly with our easy-to-use calculator</p>
+            </div>
+            <div class="feature-card reveal">
+                <h3>🌍 Location-Based Tips</h3>
+                <p>Get appropriate tip suggestions based on your location</p>
+            </div>
+            <div class="feature-card reveal">
+                <h3>💫 Modern Interface</h3>
+                <p>Enjoy a clean, intuitive design with dark mode support</p>
+            </div>
+        </div>
+
+        <div class="currency-feature reveal">
+            <h2>Easy Currency Conversion</h2>
+            <p>Travel with confidence using our currency conversion features:</p>
+            <ul>
+                <li>Choose your home currency and save it as default</li>
+                <li>Select the local currency of your destination</li>
+                <li>Support for over 170 world currencies</li>
+                <li>Offline mode with saved exchange rates</li>
+                <li>Quick switch between home and local currency</li>
+            </ul>
+            <div class="currency-box">
+                <h3 style="margin-bottom: 1rem; font-size: 1.3rem;">How It Works:</h3>
+                <p style="margin-bottom: 0.8rem;">1. Select your home currency in the settings</p>
+                <p style="margin-bottom: 0.8rem;">2. Choose the local currency for your destination</p>
+                <p style="margin-bottom: 0.8rem;">3. Enter bill amount in either currency</p>
+                <p>4. See tip and total in both currencies instantly</p>
+            </div>
+            <div class="currency-note">
+                Perfect for international travelers - easily calculate tips while seeing amounts in both your home and local currencies!
+            </div>
+        </div>
+
+        <div class="highlight-box reveal">
+            <h2>Why Choose Our Tip Calculator?</h2>
+            <p>Our app makes tipping calculations effortless while respecting your privacy. No ads, no tracking, just a simple and powerful calculator that works offline.</p>
+        </div>
+
+        <div class="legal reveal">
+            <p>By using our app, you agree to our terms and privacy policy</p>
+            <div class="legal-buttons">
+                <a href="privacy-policy.html" class="legal-button">Privacy Policy</a>
+                <a href="terms-of-service.html" class="legal-button">Terms of Service</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            function checkReveal() {
+                reveals.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    
+                    if (elementTop < windowHeight - 100) {
+                        element.classList.add('active');
+                    }
+                });
+            }
+            
+            checkReveal();
+            window.addEventListener('scroll', checkReveal);
+        });
+    </script>
+</body>
+</html> 
